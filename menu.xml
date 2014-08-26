@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OX>
+  <OXMENU id="NAVIGATION_ESHOPADMIN">
+      <MAINMENU id="moe_admin_headline">
+            <SUBMENU id="moe_backup" cl="moe_backup_admin" list="moe_backup_admin_list">
+                <TAB id="moe_backup" cl="moe_backup_admin_main" />
+            </SUBMENU>
+        </MAINMENU>
+  </OXMENU>
+</OX>
