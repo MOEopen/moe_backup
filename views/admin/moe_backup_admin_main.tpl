@@ -155,6 +155,15 @@
                     </tr>
                     <tr>
                       <td class="edittext">
+                        [{ oxmultilang ident="MOE_COMPRESSIONSCHEME" }]
+                      </td>
+                      <td class="edittext">
+                        <input type="text" class="editinput" size="28" maxlength="[{$edit->moe_backup__moecompressionscheme->fldmax_length}]" name="editval[moe_backup__moecompressionscheme]" value="[{$edit->moe_backup__moecompressionscheme->value}]" [{ $readonly }]>
+                        [{ oxinputhelp ident="HELP_MOE_COMPRESSIONSCHEME" }]
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="edittext">
                         [{ oxmultilang ident="MOE_DESCRIPTION" }]
                       </td>
                       <td class="edittext">

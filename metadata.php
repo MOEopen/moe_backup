@@ -42,7 +42,9 @@ $aModule = array(
       'moe_backup_admin_list.tpl'  => 'moe/moe_backup/views/admin/moe_backup_admin_list.tpl'
     ),
     'settings' => array(
-      array('group' => 'backupmain', 'name' => 'moe_BackupStarterFile',       'type' => 'str',   'value' => 'modules/moe/moe_backup/public/moe_backup_starter.php'),
+      array('group' => 'backupmain', 'name' => 'moe_BackupStarterFile',              'type' => 'str',   'value' => 'modules/moe/moe_backup/public/moe_backup_starter.php'),
+      array('group' => 'backupmain', 'name' => 'moe_BackupDelaultCompressionScheme', 'type' => 'str',   'value' => 'gz'),
+      array('group' => 'backupmain', 'name' => 'moe_BackupDeleteTableOnDeaktivate',  'type' => 'bool',  'value' => 'false'),
     ),
 
 );

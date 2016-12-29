@@ -6,6 +6,14 @@ class moe_backup_files {
   protected $sCompressCommand     = "tar czf ";
   protected $sCompressExtention   = ".tar.gz";
   
+  // protected $sCompressCommand     = "zip -r ";
+  // protected $sCompressExtention   = ".zip";
+  
+  protected $aCompressionSchemes = array(
+                                          'gz'  => array( 'sCompressCommand' => 'tar czf '  , 'sCompressExtention' => '.tar.gz'),
+                                          'zip' => array( 'sCompressCommand' => 'zip -rqy ' , 'sCompressExtention' => '.zip'),
+                                        );
+  
   const EOL = "<br />\n";
   
   public function getBackupStarterFile() {
@@ -14,9 +22,11 @@ class moe_backup_files {
   }
   
   public function execute($sOxid) {
-    // $aBackupDef     = $this->getBackupDefFromDb($sOxid);
+	// $aBackupDef     = $this->getBackupDefFromDb($sOxid);
     $this->setOxid( $sOxid );
     $this->setLog( "Beginne mit ausführen des Backupschemas [{$this->getBackupDeffField( $this->getOxid(), 'OCBTITLE')}]");
+    // echo "<pre>".print_r( $this, true )."</pre>";die();
+    $this->setCompressionsCommands();
     // Destination for Backupfiles
     $sBackupSaveDir = oxRegistry::getConfig()->getConfigParam( 'sShopDir' ) . $this->revisedPath( $this->getBackupDeffField( $this->getOxid(), 'MOEBACKUPDIR'), false );
     // This Dir will be saved
@@ -26,24 +36,33 @@ class moe_backup_files {
     // echo $aExcludedDirs . "\n";
     $sCommand        = $this->sCompressCommand . $sBackupSaveDir . $sBackupFileName . $aExcludedDirs . ' ' . $BackupDir;
     // echo $sCommand.self::EOL;
-      $sSystemOutput = system($sCommand, $MyResult);
-      if ($MyResult != 0)
-      {
-        $this->setLog( 'Fehler beim Speichern der Shop-Dateien' );
-        $this->setLog( $sCommand );
-        $this->setLog( "Systemmeldungen: ".$sSystemOutput );
-        return;
-      } else {
-        $this->setLog( "Speichern der Shop-Dateien des Backupschemas [{$this->getBackupDeffField( $this->getOxid(), 'OCBTITLE')}] erfolgreich" );
-      }
+    // echo "Test, Funktion:". __function__ .", Line: ". __line__ ."<br>";
+    $sSystemOutput = system($sCommand, $MyResult);
+    if ($MyResult != 0)
+    {
+      $this->setLog( 'Fehler beim Speichern der Shop-Dateien' );
+      $this->setLog( $sCommand );
+      $this->setLog( "Systemmeldungen: ".$sSystemOutput );
+      return;
+    } else {
+      $this->setLog( "Speichern der Shop-Dateien des Backupschemas [{$this->getBackupDeffField( $this->getOxid(), 'OCBTITLE')}] erfolgreich" );
+    }
     // $Test = "/data/test";
     // echo $this->revisedPath( $Test, false );
     $this->executeLog();
   }
   
+  protected function setCompressionsCommands() {
+    $sCompressionScheme = $this->getBackupDeffField($this->getOxid(), "MOECOMPRESSIONSCHEME");
+    if( empty( $sCompressionScheme ) ) return;
+    if( empty( $this->aCompressionSchemes[$sCompressionScheme] ) ) return;
+    $this->sCompressCommand   = $this->aCompressionSchemes[$sCompressionScheme]['sCompressCommand'];
+    $this->sCompressExtention = $this->aCompressionSchemes[$sCompressionScheme]['sCompressExtention'];
+  }
+  
   protected $aBackupDef = array();
   
-  protected function getBackupDeffField( $Oxid, $Fieldname) {
+  protected function getBackupDeffField($Oxid, $Fieldname) {
     $aBackupDef     = $this->getBackupDefFromDb($Oxid);
     return $aBackupDef[$Fieldname];
   }
@@ -128,9 +147,9 @@ class moe_backup_files {
   protected function executeLog() {
     $Logger = $this->getLogger();
     if( $Logger !== false ) {
-      // echo "<pre>";
-      // print_r( $this->oLogger->execute() );
-      // echo "</pre>";
+       echo "<pre>";
+       print_r( $this->oLogger->execute() );
+       echo "</pre>";
       $Logger->execute();
       echo "<pre>";
       echo $Logger->getLogAsString();

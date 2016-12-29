@@ -63,7 +63,8 @@ class moe_backup_admin_main extends oxAdminView
 
         $soxId = $this->getEditObjectId();
         
-        $aParams = oxConfig::getParameter( "editval");
+//        $aParams = oxConfig::getRequestParameter( "editval");
+        $aParams = oxRegistry::getConfig()->getRequestParameter( "editval");
         
         if ( $soxId == "-1")
         {
@@ -92,7 +93,7 @@ class moe_backup_admin_main extends oxAdminView
 
         $soxId = $this->getEditObjectId();
         
-        $aParams = oxConfig::getParameter("editval");
+        $aParams = oxConfig::getRequestParameter("editval");
 
         $oBackup = oxNew( "moe_backup" );
 
@@ -108,7 +109,7 @@ class moe_backup_admin_main extends oxAdminView
         $oBackup->assign($aParams);
 
         // apply new language
-        $oBackup->setLanguage( oxConfig::getParameter( "new_lang" ) );
+        $oBackup->setLanguage( oxConfig::getRequestParameter( "new_lang" ) );
         $oBackup->save();
 
         // set oxid if inserted

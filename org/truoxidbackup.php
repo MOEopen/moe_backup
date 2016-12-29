@@ -54,7 +54,7 @@ class truoxidbackup extends oxUBase
     parent::init();
     if (empty($this->oConfig))  $this->oConfig  = oxConfig::getInstance();
     if (empty($this->sShopDir)) $this->sShopDir = $this->oConfig->getConfigParam( 'sShopDir' );
-    $this->oSmarty = oxUtilsView::getInstance()->getSmarty();
+    $this->oSmarty = oxRegistry::get("oxUtilsView")->getSmarty();
   }
 
   public function getPathAbs($sBackupPath){

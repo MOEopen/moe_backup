@@ -2,6 +2,8 @@
 
 class moe_backup_events {
   
+  public static $sBackupDefTable = "moe_backup";
+  
   /**
    * Create Backuptable
    */
@@ -44,6 +46,27 @@ class moe_backup_events {
   }
   
   /**
+   * Proof, if Table exists
+   */
+  public static function existTable($sTable) {
+    $sSql = "SHOW TABLES LIKE '{$sTable}'";
+    $oDb  = oxDb::getDb();
+    $rs   = $oDb->select( $sSql );
+    if ($rs != false && $rs->recordCount() > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  
+  /**
+   * Getter for Backup Definition Table
+   */
+  public static function getBackupDefTable() {
+    return self::$sBackupDefTable;
+  }
+  
+  /**
    * Delete Backup Table
    */
   public static function deleteBackuptable() {
@@ -55,14 +78,17 @@ class moe_backup_events {
    * Execute action on activate event
    */
   public static function onActivate() {
-    // Create Backuptable
-    self::adBackupTableDef();
-    
-    // Create Indexes
-    self::adBackupTableIndexes();
-    
-    // Insert Backup Actions
-    self::adBackupTableBasicContent();
+    $_sBackupDefTable = self::getBackupDefTable();
+    if( self::existTable( $_sBackupDefTable ) != true ) {
+      // Create Backuptable
+      self::adBackupTableDef();
+      
+      // Create Indexes
+      self::adBackupTableIndexes();
+      
+      // Insert Backup Actions
+      self::adBackupTableBasicContent();
+    }
   }
 
   /**
@@ -70,7 +96,7 @@ class moe_backup_events {
    */
   public static function onDeactivate() {
     // Delete Backup Table
-    self::deleteBackuptable();
+    // self::deleteBackuptable();
   }
 
 }
